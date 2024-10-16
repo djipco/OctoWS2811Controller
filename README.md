@@ -22,6 +22,8 @@ speed and LEDs per channel:
 ```
 %GBR,800,512\n
 ```
+The command above would set the colour order to GBR, the speed to 800kHz and the number of LEDs per channel to
+512 (those are the default values).
 
 Available colour orders are: 
 
