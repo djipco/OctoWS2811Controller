@@ -1,6 +1,10 @@
 # OctoWS2811Controller
 
-This code only runs on Teensy 4.x+ and can be used to send serial commands to control LEDs connected to the OctoWS2811 board.
+This project allows the control of an OctoWS2811-enabled Teensy 4.1+ board from serial commands. The OctoWS2811 is an
+8-channel LED controller that makes it easy to connect to WS2811 LED arrays or strips.
+
+The control syntax is very simple and is explained below. An implementation for TouchDesigner is available in the 
+OctoWS2811Controller.tox file.
  
 ## Serial Commands
 
