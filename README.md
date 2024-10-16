@@ -14,7 +14,7 @@ The command starts with `>` and ends with `\n`. In between are the RGB values fo
 
 #### Update configuration
 
-The command starts with `%` and ends with `\n`. In between 3 comma-separated values for colour order,
+The command starts with `%` and ends with `\n`. In between are 3 comma-separated values for colour order,
 speed and LEDs per channel:
 
 ```
