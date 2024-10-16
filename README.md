@@ -60,4 +60,4 @@ Available speeds are:
   - 800
   - WS2813_800
 
-The number of LEDs per channel must be an interger between 1 and 512.
+The number of LEDs per channel must be an integer between 1 and 512.
