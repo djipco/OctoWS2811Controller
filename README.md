@@ -1,4 +1,6 @@
 # OctoWS2811Controller
+
+This code only runs on a Teensy 4.x and can be used to send serial commands to control LEDs connected to the OctoWS2811 board.
  
 ## Serial Commands
 
