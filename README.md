@@ -2,7 +2,7 @@
 
 This project allows the control of an [OctoWS2811](https://github.com/PaulStoffregen/OctoWS2811)-enabled
 Teensy 4.1+ board from commands sent over a serial connection. The OctoWS2811 is an 8-channel LED controller that
-makes it easy to connect to WS2811 LED arrays or strips.
+makes it easy to control to WS2811 LED arrays or strips.
 
 The control syntax is very simple and is explained below. However, you can also use a pre-made implementation and
 not worry about the syntax at all. One such implementaton is available in the form of a TouchDesigner component 
@@ -19,6 +19,8 @@ The command starts with `>` and ends with `\n`. In between are the RGB values fo
 ```
 >12,23,34,0,0,255,\n
 ```
+In the example above, we are updating 2 LEDs. The first one is set to R=12, G=23 and B=34. The second one is set
+to R=0, G=0 and B=255. You should send as many RGB triplets as you have LEDs configured (max 512 per channel).
 
 #### Update configuration
 
