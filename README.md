@@ -9,6 +9,11 @@ not worry about the syntax at all. Current implementations:
 
   * TouchDesigner component: [OctoWS2811Controller.tox](https://github.com/djipco/OctoWS2811Controller/raw/refs/heads/main/OctoWS2811Controller.tox)
 
+## Installation
+
+Use Arduino IDE to upload OctoWS2811Controller.ino to your Teensy 4.x device. Note that the code has only tested 
+been with Teensy 4.1 (but I believe it should work with the 4.0).
+
 ## Serial Commands
 
 Here are the commands that can be sent over serial to the board.
