@@ -5,8 +5,9 @@ Teensy 4.1+ board from commands sent over a serial connection. The OctoWS2811 is
 makes it easy to control WS2811 LED arrays or strips.
 
 The control syntax is very simple and is explained below. However, you can also use a pre-made implementation and
-not worry about the syntax at all. One such implementaton is available in the form of a TouchDesigner component 
-which can be found in the `OctoWS2811Controller.tox` file.
+not worry about the syntax at all. Current implementations:
+
+  * TouchDesigner component: `OctoWS2811Controller.tox`
 
 ## Serial Commands
 
