@@ -7,7 +7,7 @@ makes it easy to control WS2811 LED arrays or strips.
 The control syntax is very simple and is explained below. However, you can also use a pre-made implementation and
 not worry about the syntax at all. Current implementations:
 
-  * TouchDesigner component: `OctoWS2811Controller.tox`
+  * TouchDesigner component: [OctoWS2811Controller.tox](https://github.com/djipco/OctoWS2811Controller/raw/refs/heads/main/OctoWS2811Controller.tox)
 
 ## Serial Commands
 
