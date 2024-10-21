@@ -1,14 +1,19 @@
 // OctoWS2811 LED Library (see https://www.pjrc.com/teensy/td_libs_OctoWS2811.html)
 #include <OctoWS2811.h>
 
-// Number of channels on the device (OctoWS2811 has 8)
+// Number of channels on the device (this is fixed since OctoWS2811 has 8)
 const int CHANNEL_COUNT = 8;
 
-// The maximum number of LEDs per output is fixed at 512. This it because, at 800kHz, it takes
-// 30μs to update each LED + 50μs to reset. So, for 512 LEDs, the update time is 15410μs or just 
-// above 15ms. This fits inside the 16.6ms allocation for a 60Hz refresh rate. It should be noted
-// that the OctoWS2811 updates each output independently. By default, we use 512 but this can be 
-// adjusted via serial command.
+// Hard-coded maximum number of LEDs
+const int MAX_LEDS_PER_CHANNEL = 1024;
+
+// The actual number of LEDs per output defaults to 512. This it because, at 800kHz (which is 
+// currently the most common speed), it takes 30μs to update each LED + 50μs to reset. So, for 
+// 512 LEDs, the update time is 15410μs or just above 15ms. This fits inside the 16.6ms
+// allocation for a 60Hz refresh rate. It should be noted that the OctoWS2811 updates each 
+// output independently. By default, we use 512 but this can be adjusted by sending the 
+// appropriate serial command. Note that, using a lower refresh rate than 60Hz, you can use as 
+// many as 800 LEDs per channel (this is the hard-coded maximum).
 int ledsPerChannel = 512;
 
 // Default configuration for the LEDs used. It is a combination of color order and speed. These 
@@ -27,9 +32,9 @@ int ledConfig = WS2811_GRB | WS2811_800kHz;
 DMAMEM int* displayMemory;
 OctoWS2811* leds;
 
-// Creation of serial input buffer. The max buffer size (49154) is for 4096 pixels, each taking 12
-// characters (RGB values + commas) plus the initial '>' and the trailing '\n'.
-char buffer[49154];
+// Creation of serial input buffer. The max buffer size is for 8192 (8 ch. * 1024 LEDs) pixels, 
+// each taking 12 characters (RGB values + commas) plus the initial '>' and the trailing '\n'.
+char buffer[CHANNEL_COUNT * MAX_LEDS_PER_CHANNEL * 12 + 2];
 
 // Current buffer position (for reading)
 unsigned int bufferPos = 0;
@@ -191,7 +196,7 @@ void processConfig(char* command) {
   // Set number of LEDs per output
   int numLEDs = atoi(numLEDsStr);
 
-  if (numLEDs >= 1 && numLEDs <= 512) {
+  if (numLEDs >= 1 && numLEDs <= MAX_LEDS_PER_CHANNEL) {
     ledsPerChannel = numLEDs;
   } else {
     Serial.println("Invalid number of LEDs.");
@@ -276,78 +281,78 @@ void sendConfigOverSerial() {
     case WS2811_BGR:
       colorOrderStr = "BGR";
       break;
-    case WS2811_RGBW:
-      colorOrderStr = "RGBW";
-      break;
-    case WS2811_RBGW:
-      colorOrderStr = "RBGW";
-      break;
-    case WS2811_GRBW:
-      colorOrderStr = "GRBW";
-      break;
-    case WS2811_GBRW:
-      colorOrderStr = "GBRW";
-      break;
-    case WS2811_BRGW:
-      colorOrderStr = "BRGW";
-      break;
-    case WS2811_BGRW:
-      colorOrderStr = "BGRW";
-      break;
-    case WS2811_WRGB:
-      colorOrderStr = "WRGB";
-      break;
-    case WS2811_WRBG:
-      colorOrderStr = "WRBG";
-      break;
-    case WS2811_WGRB:
-      colorOrderStr = "WGRB";
-      break;
-    case WS2811_WGBR:
-      colorOrderStr = "WGBR";
-      break;
-    case WS2811_WBRG:
-      colorOrderStr = "WBRG";
-      break;
-    case WS2811_WBGR:
-      colorOrderStr = "WBGR";
-      break;
-    case WS2811_RWGB:
-      colorOrderStr = "RWGB";
-      break;
-    case WS2811_RWBG:
-      colorOrderStr = "RWBG";
-      break;
-    case WS2811_GWRB:
-      colorOrderStr = "GWRB";
-      break;
-    case WS2811_GWBR:
-      colorOrderStr = "GWBR";
-      break;
-    case WS2811_BWRG:
-      colorOrderStr = "BWRG";
-      break;
-    case WS2811_BWGR:
-      colorOrderStr = "BWGR";
-      break;
-    case WS2811_RGWB:
-      colorOrderStr = "RGWB";
-      break;
-    case WS2811_RBWG:
-      colorOrderStr = "RBWG";
-      break;
-    case WS2811_GRWB:
-      colorOrderStr = "GRWB";
-      break;
-    case WS2811_GBWR:
-      colorOrderStr = "GBWR";
-      break;
-    case WS2811_BRWG:
-      colorOrderStr = "BRWG";
-      break;
-    case WS2811_BGWR:
-      colorOrderStr = "BGWR";
-      break;
+    // case WS2811_RGBW:
+    //   colorOrderStr = "RGBW";
+    //   break;
+    // case WS2811_RBGW:
+    //   colorOrderStr = "RBGW";
+    //   break;
+    // case WS2811_GRBW:
+    //   colorOrderStr = "GRBW";
+    //   break;
+    // case WS2811_GBRW:
+    //   colorOrderStr = "GBRW";
+    //   break;
+    // case WS2811_BRGW:
+    //   colorOrderStr = "BRGW";
+    //   break;
+    // case WS2811_BGRW:
+    //   colorOrderStr = "BGRW";
+    //   break;
+    // case WS2811_WRGB:
+    //   colorOrderStr = "WRGB";
+    //   break;
+    // case WS2811_WRBG:
+    //   colorOrderStr = "WRBG";
+    //   break;
+    // case WS2811_WGRB:
+    //   colorOrderStr = "WGRB";
+    //   break;
+    // case WS2811_WGBR:
+    //   colorOrderStr = "WGBR";
+    //   break;
+    // case WS2811_WBRG:
+    //   colorOrderStr = "WBRG";
+    //   break;
+    // case WS2811_WBGR:
+    //   colorOrderStr = "WBGR";
+    //   break;
+    // case WS2811_RWGB:
+    //   colorOrderStr = "RWGB";
+    //   break;
+    // case WS2811_RWBG:
+    //   colorOrderStr = "RWBG";
+    //   break;
+    // case WS2811_GWRB:
+    //   colorOrderStr = "GWRB";
+    //   break;
+    // case WS2811_GWBR:
+    //   colorOrderStr = "GWBR";
+    //   break;
+    // case WS2811_BWRG:
+    //   colorOrderStr = "BWRG";
+    //   break;
+    // case WS2811_BWGR:
+    //   colorOrderStr = "BWGR";
+    //   break;
+    // case WS2811_RGWB:
+    //   colorOrderStr = "RGWB";
+    //   break;
+    // case WS2811_RBWG:
+    //   colorOrderStr = "RBWG";
+    //   break;
+    // case WS2811_GRWB:
+    //   colorOrderStr = "GRWB";
+    //   break;
+    // case WS2811_GBWR:
+    //   colorOrderStr = "GBWR";
+    //   break;
+    // case WS2811_BRWG:
+    //   colorOrderStr = "BRWG";
+    //   break;
+    // case WS2811_BGWR:
+    //   colorOrderStr = "BGWR";
+    //   break;
     default:
       colorOrderStr = "Unknown";
       break;
@@ -382,5 +387,3 @@ void sendConfigOverSerial() {
   Serial.println(" per channel");
 
 }
-
-
