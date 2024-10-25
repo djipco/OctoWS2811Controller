@@ -1,8 +1,8 @@
 # OctoWS2811Controller
 
-This project allows the control of an [OctoWS2811](https://github.com/PaulStoffregen/OctoWS2811)-enabled
-Teensy 4.1+ board from commands sent over a serial connection. The OctoWS2811 is an 8-channel LED controller that
-makes it easy to control WS2811 LED arrays or strips.
+This project allows the control of an [OctoWS2811](https://github.com/PaulStoffregen/OctoWS2811)-enabled Teensy 
+4.1+ board using commands sent over a serial connection. The OctoWS2811 is an 8-channel LED controller that makes
+it easy to control WS2811 LED arrays or strips.
 
 The control syntax is very simple and is explained below. However, you can also use a pre-made implementation and
 not worry about the syntax at all. Current implementations:
