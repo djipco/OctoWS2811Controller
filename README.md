@@ -1,5 +1,7 @@
 # OctoWS2811Controller
 
+## Introduction
+
 This project allows the control of an [OctoWS2811](https://github.com/PaulStoffregen/OctoWS2811)-enabled Teensy 
 4.1+ board using commands sent over a serial connection. The OctoWS2811 is an 8-channel LED controller that makes
 it easy to control WS2811 LED arrays or strips.
@@ -9,14 +11,16 @@ not worry about the syntax at all. Current implementations:
 
   * TouchDesigner component: [OctoWS2811Controller.tox](https://github.com/djipco/OctoWS2811Controller/raw/refs/heads/main/OctoWS2811Controller.tox)
 
+#### How many LEDs can be controlled?
+
 This project allows you to up to control 768 addressable LEDs per channel, for a total of 6144 LEDs (8 × 768). 
-However, to maintain a refresh rate of 60Hz, you need to limit the number of LEDs to 512. This is because each LEDs 
-take about 30µs to update (when using 800kHz LEDs). To reach the full 768, you need to lower the rate at which you 
-send the data. You can do that in the TouchDesigner component.
+However, to maintain a refresh rate of 60Hz, you need to limit the number of LEDs to 512 per channel. This is 
+because each LEDs take about 30µs to update (when using 800kHz LEDs). So, to reach the full 768, you need to lower 
+the rate at which you send the data. You can do that in the TouchDesigner component.
 
 ## Installation
 
-Use Arduino IDE to upload OctoWS2811Controller.ino to your Teensy 4.x device. Note that the code has only tested 
+Use Arduino IDE to upload `OctoWS2811Controller.ino` to your Teensy 4.x device. Note that the code has only tested 
 been with Teensy 4.1 (but I believe it should work with the 4.0).
 
 In TouchDesigner, simply drag and drop the `.tox` file to your project and enter the appropriate settings.
