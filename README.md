@@ -25,6 +25,19 @@ been with Teensy 4.1 (but I believe it should work with the 4.0).
 
 In TouchDesigner, simply drag and drop the `.tox` file to your project and enter the appropriate settings.
 
+## Teensy & OctoWS2811
+
+To use this library, you need to install the Teensy board in the Arduino IDE. To do so, follow these 
+[instructions]([url](https://www.pjrc.com/teensy/td_download.html)). Then, upload the `.ino` file to the
+board. 
+
+Both OctoWS2811 ports are wired like this:
+
+ 1. Orange
+ 2. Blue
+ 3. Green
+ 4. Brown
+
 ## Serial Commands
 
 Here are the commands that can be sent over serial to the board. You do not need to worry about the underlying 
