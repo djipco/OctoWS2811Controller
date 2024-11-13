@@ -4,7 +4,7 @@
 // Number of channels on the device (this is fixed since OctoWS2811 has 8)
 const int CHANNEL_COUNT = 8;
 
-// Hard-coded maximum number of LEDs
+// Hard-coded maximum number of LEDs. At 60Hz, the max is 512. At 30Hz, you can reach 1024.
 const int MAX_LEDS_PER_CHANNEL = 1024;
 
 // The actual number of LEDs per output defaults to 512. This it because, at 800kHz (which is 
@@ -28,13 +28,17 @@ int ledsPerChannel = 512;
 // Speed can be one of: WS2811_800kHz, WS2811_400kHz or WS2813_800kHz.
 int ledConfig = WS2811_GRB | WS2811_800kHz;
 
+// RGB needs 6 bytes per colour channel, RGBW needs 8 (we default to RGB) ?!
+int bytesPerChannel = 6;
+
 // Preparation of display memory and OctoWS2811 pointer
 DMAMEM int* displayMemory;
 OctoWS2811* leds;
 
-// Creation of serial input buffer. The max buffer size is for 8192 (8 ch. * 1024 LEDs) pixels, 
-// each taking 12 characters (RGB values + commas) plus the initial '>' and the trailing '\n'.
-char buffer[CHANNEL_COUNT * MAX_LEDS_PER_CHANNEL * 12 + 2];
+// Creation of the serial input buffer. The max buffer size is for 8192 (8 ch. * 1024 LEDs) LEDs, 
+// each taking up to 16 characters (RGBW values including commas) plus the initial '>' and the 
+// trailing '\n'.
+char buffer[CHANNEL_COUNT * MAX_LEDS_PER_CHANNEL * 16 + 2];
 
 // Current buffer position (for reading)
 unsigned int bufferPos = 0;
@@ -111,73 +115,103 @@ void processData() {
 void processConfig(char* command) {
 
   // Expecting format %<color_order>,<speed>,<leds_per_output>\n
-  char* colorOrder = strtok(command + 1, ",");
+  char* colourOrder = strtok(command + 1, ",");
   char* speed = strtok(NULL, ",");
   char* numLEDsStr = strtok(NULL, ",");
 
   // Set color order
-  if (strcmp(colorOrder, "RGB") == 0) {
+  if (strcmp(colourOrder, "RGB") == 0) {
     ledConfig = WS2811_RGB;
-  } else if (strcmp(colorOrder, "RBG") == 0) {
+    bytesPerChannel = 6;
+  } else if (strcmp(colourOrder, "RBG") == 0) {
     ledConfig = WS2811_RBG;
-  } else if (strcmp(colorOrder, "GRB") == 0) {
+    bytesPerChannel = 6;
+  } else if (strcmp(colourOrder, "GRB") == 0) {
     ledConfig = WS2811_GRB;
-  } else if (strcmp(colorOrder, "GBR") == 0) {
+    bytesPerChannel = 6;
+  } else if (strcmp(colourOrder, "GBR") == 0) {
     ledConfig = WS2811_GBR;
-  } else if (strcmp(colorOrder, "BRG") == 0) {
+    bytesPerChannel = 6;
+  } else if (strcmp(colourOrder, "BRG") == 0) {
     ledConfig = WS2811_BRG;
-  } else if (strcmp(colorOrder, "BGR") == 0) {
+    bytesPerChannel = 6;
+  } else if (strcmp(colourOrder, "BGR") == 0) {
     ledConfig = WS2811_BGR;
-  } else if (strcmp(colorOrder, "RGBW") == 0) {
+    bytesPerChannel = 6;
+  } else if (strcmp(colourOrder, "RGBW") == 0) {
     ledConfig = WS2811_RGBW;
-  } else if (strcmp(colorOrder, "RBGW") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "RBGW") == 0) {
     ledConfig = WS2811_RBGW;
-  } else if (strcmp(colorOrder, "GRBW") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "GRBW") == 0) {
     ledConfig = WS2811_GRBW;
-  } else if (strcmp(colorOrder, "GBRW") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "GBRW") == 0) {
     ledConfig = WS2811_GBRW;
-  } else if (strcmp(colorOrder, "BRGW") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "BRGW") == 0) {
     ledConfig = WS2811_BRGW;
-  } else if (strcmp(colorOrder, "BGRW") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "BGRW") == 0) {
     ledConfig = WS2811_BGRW;
-  } else if (strcmp(colorOrder, "WRGB") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "WRGB") == 0) {
     ledConfig = WS2811_WRGB;
-  } else if (strcmp(colorOrder, "WRBG") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "WRBG") == 0) {
     ledConfig = WS2811_WRBG;
-  } else if (strcmp(colorOrder, "WGRB") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "WGRB") == 0) {
     ledConfig = WS2811_WGRB;
-  } else if (strcmp(colorOrder, "WGBR") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "WGBR") == 0) {
     ledConfig = WS2811_WGBR;
-  } else if (strcmp(colorOrder, "WBRG") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "WBRG") == 0) {
     ledConfig = WS2811_WBRG;
-  } else if (strcmp(colorOrder, "WBGR") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "WBGR") == 0) {
     ledConfig = WS2811_WBGR;
-  } else if (strcmp(colorOrder, "RWGB") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "RWGB") == 0) {
     ledConfig = WS2811_RWGB;
-  } else if (strcmp(colorOrder, "RWBG") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "RWBG") == 0) {
     ledConfig = WS2811_RWBG;
-  } else if (strcmp(colorOrder, "GWRB") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "GWRB") == 0) {
     ledConfig = WS2811_GWRB;
-  } else if (strcmp(colorOrder, "GWBR") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "GWBR") == 0) {
     ledConfig = WS2811_GWBR;
-  } else if (strcmp(colorOrder, "BWRG") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "BWRG") == 0) {
     ledConfig = WS2811_BWRG;
-  } else if (strcmp(colorOrder, "BWGR") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "BWGR") == 0) {
     ledConfig = WS2811_BWGR;
-  } else if (strcmp(colorOrder, "RGWB") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "RGWB") == 0) {
     ledConfig = WS2811_RGWB;
-  } else if (strcmp(colorOrder, "RBWG") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "RBWG") == 0) {
     ledConfig = WS2811_RBWG;
-  } else if (strcmp(colorOrder, "GRWB") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "GRWB") == 0) {
     ledConfig = WS2811_GRWB;
-  } else if (strcmp(colorOrder, "GBWR") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "GBWR") == 0) {
     ledConfig = WS2811_GBWR;
-  } else if (strcmp(colorOrder, "BRWG") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "BRWG") == 0) {
     ledConfig = WS2811_BRWG;
-  } else if (strcmp(colorOrder, "BGWR") == 0) {
+    bytesPerChannel = 8;
+  } else if (strcmp(colourOrder, "BGWR") == 0) {
     ledConfig = WS2811_BGWR;
+    bytesPerChannel = 8;
   } else {
-    Serial.println("Invalid color order");
+    Serial.println("Invalid colour order");
     return;
   }
 
@@ -213,15 +247,15 @@ void configureLEDs() {
   // Free previous OctoWS2811 object (if any exists)
   if (leds != nullptr) delete leds;
 
-  // Create a new OctoWS2811 object with the curently defined config
-  displayMemory = (int*)malloc(ledsPerChannel * 6 * sizeof(int));
+  // Create a new OctoWS2811 object with the curently defined config. RGB needs 24 bytes, RGBW needs 32 bytes.
+  displayMemory = (int*)malloc(ledsPerChannel * bytesPerChannel * sizeof(int));
   leds = new OctoWS2811(ledsPerChannel, displayMemory, NULL, ledConfig);
 
   // Initialize the object and turn off all LEDs
   leds->begin();
   leds->show();
 
-  // Print the configuration over serial
+  // Print the configuration over serial (for debugging purposes)
   sendConfigOverSerial();
 
 }
@@ -259,102 +293,102 @@ void updateLEDs() {
 void sendConfigOverSerial() {
 
   // Extract and print color order (mask out the speed bits with 0x3F)
-  int colorOrder = ledConfig & 0x3F;
-  const char* colorOrderStr;
+  int colourOrder = ledConfig & 0x3F;
+  const char* colourOrderStr;
 
-  switch (colorOrder) {
+  switch (colourOrder) {
     case WS2811_RGB:
-      colorOrderStr = "RGB";
+      colourOrderStr = "RGB";
       break;
     case WS2811_RBG:
-      colorOrderStr = "RBG";
+      colourOrderStr = "RBG";
       break;
     case WS2811_GRB:
-      colorOrderStr = "GRB";
+      colourOrderStr = "GRB";
       break;
     case WS2811_GBR:
-      colorOrderStr = "GBR";
+      colourOrderStr = "GBR";
       break;
     case WS2811_BRG:
-      colorOrderStr = "BRG";
+      colourOrderStr = "BRG";
       break;
     case WS2811_BGR:
-      colorOrderStr = "BGR";
+      colourOrderStr = "BGR";
       break;
-    // case WS2811_RGBW:
-    //   colorOrderStr = "RGBW";
-    //   break;
-    // case WS2811_RBGW:
-    //   colorOrderStr = "RBGW";
-    //   break;
-    // case WS2811_GRBW:
-    //   colorOrderStr = "GRBW";
-    //   break;
-    // case WS2811_GBRW:
-    //   colorOrderStr = "GBRW";
-    //   break;
-    // case WS2811_BRGW:
-    //   colorOrderStr = "BRGW";
-    //   break;
-    // case WS2811_BGRW:
-    //   colorOrderStr = "BGRW";
-    //   break;
-    // case WS2811_WRGB:
-    //   colorOrderStr = "WRGB";
-    //   break;
-    // case WS2811_WRBG:
-    //   colorOrderStr = "WRBG";
-    //   break;
-    // case WS2811_WGRB:
-    //   colorOrderStr = "WGRB";
-    //   break;
-    // case WS2811_WGBR:
-    //   colorOrderStr = "WGBR";
-    //   break;
-    // case WS2811_WBRG:
-    //   colorOrderStr = "WBRG";
-    //   break;
-    // case WS2811_WBGR:
-    //   colorOrderStr = "WBGR";
-    //   break;
-    // case WS2811_RWGB:
-    //   colorOrderStr = "RWGB";
-    //   break;
-    // case WS2811_RWBG:
-    //   colorOrderStr = "RWBG";
-    //   break;
-    // case WS2811_GWRB:
-    //   colorOrderStr = "GWRB";
-    //   break;
-    // case WS2811_GWBR:
-    //   colorOrderStr = "GWBR";
-    //   break;
-    // case WS2811_BWRG:
-    //   colorOrderStr = "BWRG";
-    //   break;
-    // case WS2811_BWGR:
-    //   colorOrderStr = "BWGR";
-    //   break;
-    // case WS2811_RGWB:
-    //   colorOrderStr = "RGWB";
-    //   break;
-    // case WS2811_RBWG:
-    //   colorOrderStr = "RBWG";
-    //   break;
-    // case WS2811_GRWB:
-    //   colorOrderStr = "GRWB";
-    //   break;
-    // case WS2811_GBWR:
-    //   colorOrderStr = "GBWR";
-    //   break;
-    // case WS2811_BRWG:
-    //   colorOrderStr = "BRWG";
-    //   break;
-    // case WS2811_BGWR:
-    //   colorOrderStr = "BGWR";
-    //   break;
+    case WS2811_RGBW:
+      colourOrderStr = "RGBW";
+      break;
+    case WS2811_RBGW:
+      colourOrderStr = "RBGW";
+      break;
+    case WS2811_GRBW:
+      colourOrderStr = "GRBW";
+      break;
+    case WS2811_GBRW:
+      colourOrderStr = "GBRW";
+      break;
+    case WS2811_BRGW:
+      colourOrderStr = "BRGW";
+      break;
+    case WS2811_BGRW:
+      colourOrderStr = "BGRW";
+      break;
+    case WS2811_WRGB:
+      colourOrderStr = "WRGB";
+      break;
+    case WS2811_WRBG:
+      colourOrderStr = "WRBG";
+      break;
+    case WS2811_WGRB:
+      colourOrderStr = "WGRB";
+      break;
+    case WS2811_WGBR:
+      colourOrderStr = "WGBR";
+      break;
+    case WS2811_WBRG:
+      colourOrderStr = "WBRG";
+      break;
+    case WS2811_WBGR:
+      colourOrderStr = "WBGR";
+      break;
+    case WS2811_RWGB:
+      colourOrderStr = "RWGB";
+      break;
+    case WS2811_RWBG:
+      colourOrderStr = "RWBG";
+      break;
+    case WS2811_GWRB:
+      colourOrderStr = "GWRB";
+      break;
+    case WS2811_GWBR:
+      colourOrderStr = "GWBR";
+      break;
+    case WS2811_BWRG:
+      colourOrderStr = "BWRG";
+      break;
+    case WS2811_BWGR:
+      colourOrderStr = "BWGR";
+      break;
+    case WS2811_RGWB:
+      colourOrderStr = "RGWB";
+      break;
+    case WS2811_RBWG:
+      colourOrderStr = "RBWG";
+      break;
+    case WS2811_GRWB:
+      colourOrderStr = "GRWB";
+      break;
+    case WS2811_GBWR:
+      colourOrderStr = "GBWR";
+      break;
+    case WS2811_BRWG:
+      colourOrderStr = "BRWG";
+      break;
+    case WS2811_BGWR:
+      colourOrderStr = "BGWR";
+      break;
     default:
-      colorOrderStr = "Unknown";
+      colourOrderStr = "Unknown";
       break;
   }
 
@@ -379,7 +413,7 @@ void sendConfigOverSerial() {
 
   // Print the configuration used
   Serial.print("Configuration: ");
-  Serial.print(colorOrderStr);
+  Serial.print(colourOrderStr);
   Serial.print(", ");
   Serial.print(speedStr);
   Serial.print(", ");
