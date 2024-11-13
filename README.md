@@ -23,15 +23,14 @@ the rate at which you send the data. You can do that in the TouchDesigner compon
 Use Arduino IDE to upload `OctoWS2811Controller.ino` to your Teensy 4.x device. Note that the code has only tested 
 been with Teensy 4.1 (but I believe it should work with the 4.0).
 
+Note that you will have to install the Teensy board in the Arduino IDE. To do so, follow these 
+[instructions]([url](https://www.pjrc.com/teensy/td_download.html)). 
+
 In TouchDesigner, simply drag and drop the `.tox` file to your project and enter the appropriate settings.
 
-## Teensy & OctoWS2811
+## OctoWS2811
 
-To use this library, you need to install the Teensy board in the Arduino IDE. To do so, follow these 
-[instructions]([url](https://www.pjrc.com/teensy/td_download.html)). Then, upload the `.ino` file to the
-board. 
-
-Both OctoWS2811 ports are wired like this:
+Both OctoWS2811 RJ-45 ports are wired like this:
 
  1. Orange
  2. Blue
