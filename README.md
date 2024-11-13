@@ -66,12 +66,10 @@ The command above would set the colour order to GBR, the speed to 800kHz and the
 
 Available colour orders are: 
 
-  - RGB
-  - RBG
-  - GRB
-  - GBR
-  - BRG
-  - BGR
+  - **3 channels:** RGB, RBG, GRB, GBR, BRG, BGR
+
+  - **4 channels:** RGBW, RBGW, GRBW, GBRW, BRGW, BGRW, WRGB, WRBG, WGRB, WGBR, WBRG, WBGR, RWGB, RWBG, GWRB, GWBR,
+    BWRG, BWGR, RGWB, RBWG, GRWB, GBWR, BRWG, BGWR
 
 Available speeds are:
 
