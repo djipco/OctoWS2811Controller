@@ -50,7 +50,7 @@ The command starts with `>` and ends with `\n`. In between are the RGB values fo
 >12,23,34,0,0,255,\n
 ```
 In the example above, we are updating 2 LEDs. The first one is set to R=12, G=23 and B=34. The second one is set
-to R=0, G=0 and B=255. You should send as many RGB triplets as you have LEDs configured (max 512 per channel). If
+to R=0, G=0 and B=255. You should send as many RGB triplets as you have LEDs configured (max 768 per channel). If
 you send less, the extra LEDs will simply remain as is.
 
 #### Update configuration
