@@ -24,7 +24,7 @@ Use Arduino IDE to upload `OctoWS2811Controller.ino` to your Teensy 4.x device. 
 been with Teensy 4.1 (but I believe it should work with the 4.0).
 
 Note that you will have to install the Teensy board in the Arduino IDE. To do so, follow these 
-[https://www.pjrc.com/teensy/td_download.html](instructions). 
+[instructions](https://www.pjrc.com/teensy/td_download.html). 
 
 In TouchDesigner, simply drag and drop the `.tox` file to your project and enter the appropriate settings.
 
