@@ -13,10 +13,10 @@ not worry about the syntax at all. Current implementations:
 
 #### How many LEDs can be controlled?
 
-This project allows you to up to control 768 addressable LEDs per channel, for a total of 6144 LEDs (8 × 768). 
-However, to maintain a refresh rate of 60Hz, you need to limit the number of LEDs to 512 per channel. This is 
-because each LEDs take about 30µs to update (when using 800kHz LEDs). So, to reach the full 768, you need to lower 
-the rate at which you send the data. You can do that in the TouchDesigner component.
+Theoretically, this project allows you to control up to 768 addressable LEDs per channel, for a total of 6144 LEDs
+(8 × 768). However, this depends on the speed of the serial connection. The Teensy uses a serial connection speed of 
+either 12 or 480 Mbits/sec depending on the host it is connected to. So, depending on host speed, you may or may not
+be able to reach the maximum of 6144 LEDs. 
 
 ## Installation
 
