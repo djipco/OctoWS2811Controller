@@ -23,15 +23,14 @@ the rate at which you send the data. You can do that in the TouchDesigner compon
 Use Arduino IDE to upload `OctoWS2811Controller.ino` to your Teensy 4.x device. Note that the code has only tested 
 been with Teensy 4.1 (but I believe it should work with the 4.0).
 
+Note that you will have to install the Teensy board in the Arduino IDE. To do so, follow these 
+[instructions](https://www.pjrc.com/teensy/td_download.html). 
+
 In TouchDesigner, simply drag and drop the `.tox` file to your project and enter the appropriate settings.
 
-## Teensy & OctoWS2811
+## OctoWS2811
 
-To use this library, you need to install the Teensy board in the Arduino IDE. To do so, follow these 
-[instructions]([url](https://www.pjrc.com/teensy/td_download.html)). Then, upload the `.ino` file to the
-board. 
-
-Both OctoWS2811 ports are wired like this:
+Both OctoWS2811 RJ-45 ports are wired like this:
 
  1. Orange
  2. Blue
@@ -51,7 +50,7 @@ The command starts with `>` and ends with `\n`. In between are the RGB values fo
 >12,23,34,0,0,255,\n
 ```
 In the example above, we are updating 2 LEDs. The first one is set to R=12, G=23 and B=34. The second one is set
-to R=0, G=0 and B=255. You should send as many RGB triplets as you have LEDs configured (max 512 per channel). If
+to R=0, G=0 and B=255. You should send as many RGB triplets as you have LEDs configured (max 768 per channel). If
 you send less, the extra LEDs will simply remain as is.
 
 #### Update configuration
@@ -67,12 +66,10 @@ The command above would set the colour order to GBR, the speed to 800kHz and the
 
 Available colour orders are: 
 
-  - RGB
-  - RBG
-  - GRB
-  - GBR
-  - BRG
-  - BGR
+  - **3 channels:** RGB, RBG, GRB, GBR, BRG, BGR
+
+  - **4 channels:** RGBW, RBGW, GRBW, GBRW, BRGW, BGRW, WRGB, WRBG, WGRB, WGBR, WBRG, WBGR, RWGB, RWBG, GWRB, GWBR,
+    BWRG, BWGR, RGWB, RBWG, GRWB, GBWR, BRWG, BGWR
 
 Available speeds are:
 
