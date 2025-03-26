@@ -4,8 +4,8 @@
 // Number of channels on the device (this is fixed since OctoWS2811 has 8)
 const int CHANNEL_COUNT = 8;
 
-// Hard-coded maximum number of LEDs. At 60Hz, the max is 512. At 30Hz, you can reach 1024.
-const int MAX_LEDS_PER_CHANNEL = 1024;
+// Hard-coded maximum number of LEDs (heuristically fixed at 768 for now)
+const int MAX_LEDS_PER_CHANNEL = 768;
 
 // The actual number of LEDs per output defaults to 512. This it because, at 800kHz (which is 
 // currently the most common speed), it takes 30μs to update each LED + 50μs to reset. So, for 
@@ -13,7 +13,7 @@ const int MAX_LEDS_PER_CHANNEL = 1024;
 // allocation for a 60Hz refresh rate. It should be noted that the OctoWS2811 updates each 
 // output independently. By default, we use 512 but this can be adjusted by sending the 
 // appropriate serial command. Note that, using a lower refresh rate than 60Hz, you can use as 
-// many as 800 LEDs per channel (this is the hard-coded maximum).
+// many as 768 LEDs per channel (this is the hard-coded maximum).
 int ledsPerChannel = 512;
 
 // Default configuration for the LEDs used. It is a combination of color order and speed. These 
@@ -28,15 +28,15 @@ int ledsPerChannel = 512;
 // Speed can be one of: WS2811_800kHz, WS2811_400kHz or WS2813_800kHz.
 int ledConfig = WS2811_GRB | WS2811_800kHz;
 
-// RGB needs 6 bytes per colour channel, RGBW needs 8 (we default to RGB) ?!
+// RGB needs 6 bytes per colour channel, RGBW needs 8 (we default to RGB)
 int bytesPerChannel = 6;
 
 // Preparation of display memory and OctoWS2811 pointer
 DMAMEM int* displayMemory;
 OctoWS2811* leds;
 
-// Creation of the serial input buffer. The max buffer size is for 8192 (8 ch. * 1024 LEDs) LEDs, 
-// each taking up to 16 characters (RGBW values including commas) plus the initial '>' and the 
+// Creation of the serial input buffer. The max buffer size is for 6144 (8 ch. * 768 LEDs) LEDs, 
+// each taking up to 16 characters (RGBW values, including commas) plus the initial '>' and the 
 // trailing '\n'.
 char buffer[CHANNEL_COUNT * MAX_LEDS_PER_CHANNEL * 16 + 2];
 
