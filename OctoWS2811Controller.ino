@@ -35,9 +35,10 @@ int bytesPerChannel = 6;
 DMAMEM int* displayMemory;
 OctoWS2811* leds;
 
-// Creation of the serial input buffer. The max buffer size is for 6144 (8 ch. * 768 LEDs) LEDs, 
-// each taking up to 16 characters (RGBW values, including commas) plus the initial '>' and the 
-// trailing '\n'.
+// Creation of the serial input buffer. The max buffer size is for 6144 (8 ch. * 768) LEDs. Each 
+// LED has 3 colours (RGB). Each colour is represented by a maximum of 3 characters 0-255. A comma
+// is added as a separator. So, each color takes up to 4 chars. We also need to account for the 
+// initial '>' and the trailing '\n'.
 char buffer[CHANNEL_COUNT * MAX_LEDS_PER_CHANNEL * 16 + 2];
 
 // Current buffer position (for reading)
