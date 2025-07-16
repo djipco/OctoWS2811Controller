@@ -1,5 +1,10 @@
 # OctoWS2811Controller
 
+> [!CAUTION]
+> **This project is no longer maintained**. For an updated replacement, check out
+> [Luminoctopus](https://github.com/djipco/luminoctopus)! This new project uses a compact binary communication
+> protocol which is more efficient and reliable.
+
 ## Introduction
 
 This project allows the control of an [OctoWS2811](https://github.com/PaulStoffregen/OctoWS2811)-enabled Teensy 
